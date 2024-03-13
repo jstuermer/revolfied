@@ -22,27 +22,31 @@ pub fn spawn_player(
     ));
 }
 
+/// System that handles the player movement.
 pub fn player_movement(
     mut player_query: Query<&mut Transform, With<Player>>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
     time: Res<Time>,
 ) {
     let mut player_transform = player_query.single_mut();
-    let mut direction = Vec3::ZERO;
+    let mut direction = Vec2::ZERO;
 
     if keyboard_input.pressed(KeyCode::ArrowLeft) {
-        direction += Vec3::new(-1.0, 0.0, 0.0)
+        direction = Vec2::new(-1.0, 0.0);
+        player_transform.rotation = Quat::from_rotation_arc_2d(Vec2::Y, direction);
     }
     if keyboard_input.pressed(KeyCode::ArrowRight) {
-        direction += Vec3::new(1.0, 0.0, 0.0)
+        direction = Vec2::new(1.0, 0.0);
+        player_transform.rotation = Quat::from_rotation_arc_2d(Vec2::Y, direction);
     }
     if keyboard_input.pressed(KeyCode::ArrowDown) {
-        direction += Vec3::new(0.0, -1.0, 0.0)
+        direction = Vec2::new(0.0, -1.0);
+        player_transform.rotation = Quat::from_rotation_arc_2d(Vec2::Y, direction);
     }
     if keyboard_input.pressed(KeyCode::ArrowUp) {
-        direction += Vec3::new(0.0, 1.0, 0.0)
+        direction = Vec2::new(0.0, 1.0);
+        player_transform.rotation = Quat::from_rotation_arc_2d(Vec2::Y, direction);
     }
 
-    direction = direction.normalize_or_zero();
-    player_transform.translation += direction * PLAYER_SPEED * time.delta_seconds();
+    player_transform.translation += direction.extend(0.0) * PLAYER_SPEED * time.delta_seconds();
 }
