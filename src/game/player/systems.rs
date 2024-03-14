@@ -2,7 +2,7 @@ use bevy::{prelude::*, window::PrimaryWindow};
 
 use super::components::Player;
 
-const PLAYER_SPEED: f32 = 500.0;
+const PLAYER_SPEED: f32 = 300.0;
 
 /// Spawn the player sprite.
 pub fn spawn_player(
